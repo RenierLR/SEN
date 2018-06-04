@@ -118,7 +118,7 @@
         </Canvas>
 
         <StackPanel  Width="160" Height="60" Canvas.Bottom="50" Canvas.Left="470">
-            <Button Content="Back" Width="160" Height="60" Background="#93ed9a" FontSize="30"/>
+            <Button Content="Home" Width="160" Height="60" Background="#93ed9a" FontSize="30"/>
         </StackPanel>
 
         <StackPanel  Width="160" Height="60" Canvas.Bottom="50" Canvas.Left="650">

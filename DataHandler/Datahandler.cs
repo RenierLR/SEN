@@ -21,6 +21,8 @@ namespace DataHandler
 
         public DataHandler() { }
 
+        #region ADO.net dynamic query method
+
         public DataTable dynamicQueries<T>(string queryType, object objectClass, KeyValuePair<string, string[,]> table)
         {
             //return dalk n Datatable. As dit insert, delete, of update is, return null
@@ -46,9 +48,7 @@ namespace DataHandler
 
                 queryString.Append("FROM ");
                 queryString.Append(table.Key);
-
-                //ErrorHandler.ErrorHandle.log(queryString.ToString());
-
+                
                 DbProviderFactory factory = DbProviderFactories.GetFactory(providerName);
 
                 DbConnection connection = factory.CreateConnection();
@@ -93,7 +93,6 @@ namespace DataHandler
 
                         // Insert a new row.
                         DataRow newRow = returnTable.NewRow();
-                        //  newRow["CustomerID"] = "XYZZZ";
 
                         for (int i = 0; i < table.Value.GetLength(0); i++)
                         {
@@ -128,7 +127,7 @@ namespace DataHandler
                         //editRow[0]["CompanyName"] = "XYZ Corporation";
 
                         // Update the row based on GUID
-                        DataRow[] editRow = returnTable.Select(string.Format("guid = '{0}'", spesificClass.GetType().GetProperty("GUID").GetValue(spesificClass)));
+                        DataRow[] editRow = returnTable.Select(string.Format("globalUniqueID = '{0}'", spesificClass.GetType().GetProperty("GUID").GetValue(spesificClass)));
                         //editRow[0]["CompanyName"] = "XYZ Corporation";
                         for (int i = 0; i < table.Value.GetLength(0); i++)
                         {
@@ -153,7 +152,7 @@ namespace DataHandler
                         adapter.Fill(returnTable);
 
                         // Delete a row.
-                        DataRow[] deleteRow = returnTable.Select(string.Format("guid = '{0}'", spesificClass.GetType().GetProperty("GUID").GetValue(spesificClass)));
+                        DataRow[] deleteRow = returnTable.Select(string.Format("globalUniqueID = '{0}'", spesificClass.GetType().GetProperty("GUID").GetValue(spesificClass)));
                         foreach (DataRow row in deleteRow)
                         {
                             row.Delete();
@@ -169,14 +168,19 @@ namespace DataHandler
 
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                //ErrorHandler.ErrorHandle.handle(ex, true, false, ex.ToString());
+                FileHandlerTxt FHandler = new FileHandlerTxt();
+                FHandler.appendDataToTextFile(new List<string> { string.Format("Exception {0} on {1}", e.Message, DateTime.UtcNow.ToLongDateString()) });
             }
 
 
             return returnTable;
         }
+
+        #endregion
+
+        #region Stored procedure dynamic methods
 
         public void nonQuery(string query, Dictionary<string, string> parameters)
         {
@@ -281,5 +285,6 @@ namespace DataHandler
             return dataTable;
         }
 
+        #endregion
     }
 }

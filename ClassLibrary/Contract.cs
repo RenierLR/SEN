@@ -8,6 +8,7 @@ namespace SmartHomeSystemsClassLibrary
 {
     public abstract class Contract
     {
+        #region Fields
         private decimal contractCost;
 
         private string contractPaymentType;
@@ -15,11 +16,13 @@ namespace SmartHomeSystemsClassLibrary
         private int contractInstallments;
 
         private Guid contractGuid;
+        #endregion
 
+        #region Properties
         public Guid cGuid
         {
             get { return contractGuid; }
-            set { contractGuid = value; }
+            //set { contractGuid = value; }
         }
 
         public int installments
@@ -39,7 +42,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return contractCost; }
             set { contractCost = value; }
         }
+        #endregion
 
+        #region Constructors
         public Contract()
         {
 
@@ -50,7 +55,36 @@ namespace SmartHomeSystemsClassLibrary
             this.cost = Cost;
             this.paymentType = PaymentType;
             this.installments = Installments;
-            this.cGuid = ContractGuidParam;
+            this.contractGuid = ContractGuidParam;
         }
+        #endregion
+
+        #region Overrides
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Contract newObj = obj as Contract;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return (this.contractGuid == newObj.contractGuid);
+        }
+
+        public override int GetHashCode()
+        {
+            return contractGuid.GetHashCode() ^ installments.GetHashCode() ^ paymentType.GetHashCode() ^ cost.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return "installments: "+installments.ToString()+", payment type: "+paymentType+", cost: "+cost.ToString();
+        }
+        #endregion
     }
 }

@@ -8,6 +8,7 @@ namespace SmartHomeSystemsClassLibrary
 {
     public class ContactDetails
     {
+        #region Fields
         private string contactEmail;
 
         private string contactCellNumber;
@@ -15,11 +16,13 @@ namespace SmartHomeSystemsClassLibrary
         private string contactTellNumber;
 
         private Guid contactGuid;
+        #endregion
 
+        #region Properties
         public Guid guid
         {
             get { return contactGuid; }
-            set { contactGuid = value; }
+            //set { contactGuid = value; }
         }
 
         public string tellNumber
@@ -39,7 +42,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return contactEmail; }
             set { contactEmail = value; }
         }
+        #endregion
 
+        #region Constructors
         public ContactDetails()
         {
 
@@ -50,22 +55,36 @@ namespace SmartHomeSystemsClassLibrary
             this.email = Email;
             this.cellNumber = CellNumber;
             this.tellNumber = TellNumber;
-            this.guid = guidParam;
+            this.contactGuid = guidParam;
         }
+        #endregion
 
+        #region Overrides
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if(obj == null)
+            {
+                return false;
+            }
+
+            ContactDetails newObj = obj as ContactDetails;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return (this.guid == newObj.guid);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return contactGuid.GetHashCode() ^ tellNumber.GetHashCode() ^ cellNumber.GetHashCode() ^ email.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return "tellnumber: "+tellNumber+", cellnumber: "+cellNumber+", email: "+email;
         }
+        #endregion
     }
 }

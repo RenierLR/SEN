@@ -8,6 +8,7 @@ namespace SmartHomeSystemsClassLibrary
 {
     public abstract class Person
     {
+        #region Fields
         private string personName;
 
         private string personSurname;
@@ -19,11 +20,13 @@ namespace SmartHomeSystemsClassLibrary
         private ContactDetails personContactDetails;
 
         private Guid personGuid;
+        #endregion
 
+        #region Properties
         public Guid pGuid
         {
             get { return personGuid; }
-            set { personGuid = value; }
+            //set { personGuid = value; }
         }
 
         public ContactDetails contactDetails
@@ -55,7 +58,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return personName; }
             set { personName = value; }
         }
+        #endregion
 
+        #region Constructors
         public Person()
         {
 
@@ -68,22 +73,36 @@ namespace SmartHomeSystemsClassLibrary
             this.ID = ID;
             this.address = AddressObject;
             this.contactDetails = ContactDetailsObject;
-            this.pGuid = PersonGuidParam;
+            this.personGuid = PersonGuidParam;
         }
+        #endregion
 
+        #region Overrides
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Person newObj = obj as Person;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return (this.pGuid == newObj.pGuid);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return personGuid.GetHashCode() ^ contactDetails.GetHashCode() ^ address.GetHashCode() ^ ID.GetHashCode() ^ surname.GetHashCode() ^ name.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return "name: "+name+", surname: "+surname+", id: "+ID+", address: {"+address.ToString()+"}, contact details: {"+contactDetails.ToString()+"}";
         }
+        #endregion
     }
 }

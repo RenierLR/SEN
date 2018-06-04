@@ -8,6 +8,7 @@ namespace SmartHomeSystemsClassLibrary
 {
     public class ClientContract : Contract
     {
+        #region Fields
         private string contractIdentifier;
 
         private DateTime contractIssueDate;
@@ -15,11 +16,13 @@ namespace SmartHomeSystemsClassLibrary
         private int contractInstallmentsPayed;
 
         private Guid clientContractGuid;
+        #endregion
 
+        #region Properties
         public Guid ccGuid
         {
             get { return clientContractGuid; }
-            set { clientContractGuid = value; }
+            //set { clientContractGuid = value; }
         }
 
         public int installmentsPayed
@@ -39,7 +42,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return contractIdentifier; }
             set { contractIdentifier = value; }
         }
+        #endregion
 
+        #region Constructors
         public ClientContract()
         {
 
@@ -50,7 +55,36 @@ namespace SmartHomeSystemsClassLibrary
             this.identifier = Identifier;
             this.issueDate = IssueDate;
             this.installmentsPayed = InstallmentsPayed;
-            this.ccGuid = ClientContractGuidParam;
+            this.clientContractGuid = ClientContractGuidParam;
         }
+        #endregion
+
+        #region Overrides
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            ClientContract newObj = obj as ClientContract;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return (this.ccGuid == newObj.ccGuid);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ clientContractGuid.GetHashCode() ^ installmentsPayed.GetHashCode() ^ issueDate.GetHashCode() ^ identifier.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString()+", installments payed: "+installmentsPayed.ToString()+", date issued: "+issueDate.ToString()+", identifier: "+identifier;
+        }
+        #endregion
     }
 }

@@ -42,11 +42,13 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="Appointment.cs" />
+    <Compile Include="CallLog.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientContract.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ContactDetails.cs" />
     <Compile Include="Contract.cs" />
+    <Compile Include="ErrorLog.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Person.cs" />

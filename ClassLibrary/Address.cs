@@ -8,6 +8,7 @@ namespace SmartHomeSystemsClassLibrary
 {
     public class Address
     {
+        #region Fields
         private string addressCountry;
 
         private string addressCity;
@@ -19,11 +20,13 @@ namespace SmartHomeSystemsClassLibrary
         private string addressStreet2;
 
         private Guid addressGuid;
+        #endregion
 
+        #region Properties
         public Guid guid
         {
             get { return addressGuid; }
-            set { addressGuid = value; }
+            //set { addressGuid = value; }
         }
    
         public string street2
@@ -55,7 +58,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return addressCountry; }
             set { addressCountry = value; }
         }
+        #endregion
 
+        #region Constructors
         public Address()
         {
 
@@ -68,22 +73,36 @@ namespace SmartHomeSystemsClassLibrary
             this.postalCode = PostalCode;
             this.street = Street;
             this.street2 = Street2;
-            this.guid = guidParam;
+            this.addressGuid = guidParam;
         }
+        #endregion
 
+        #region Overrides
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Address newObj = obj as Address;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return (this.addressGuid == newObj.addressGuid);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return addressGuid.GetHashCode() ^ street.GetHashCode() ^ street2.GetHashCode() ^ postalCode.GetHashCode() ^ city.GetHashCode() ^ country.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return "line1: "+street+", line2: "+street2+", postalcode: "+postalCode+", city: "+city+", country: "+country;
         }
+        #endregion
     }
 }

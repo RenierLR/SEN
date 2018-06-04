@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary;
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace SEN321_Project
     /// </summary>
     public partial class SignInWindow : Window
     {
+
+        
+
         public SignInWindow()
         {
             InitializeComponent();
@@ -30,55 +34,48 @@ namespace SEN321_Project
 
         }
 
-        [System.Runtime.InteropServices.DllImport("advapi32.dll")]
-        public static extern bool LogonUser(string userName, string domainName, string password, int LogonType, int LogonProvider, ref IntPtr phToken);
-
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-            bool issuccess = false;
-            string username = GetloggedinUserName();
-
-            if (username.ToLowerInvariant().Contains(txtUsername.Text.Trim().ToLowerInvariant()) && username.ToLowerInvariant().Contains(txtDomain.Text.Trim().ToLowerInvariant()))
-            {
-                issuccess = IsValidateCredentials(txtUsername.Text.Trim(), txtPassword.Password.Trim(), txtDomain.Text.Trim());
-            }
-
-            if (issuccess)
-                MessageBox.Show("Successfuly Login !!!");
-            else
-                MessageBox.Show("User Name / Password / Domain is invalid !!!");
-        }
-
-        private string GetloggedinUserName()
-        {
-            System.Security.Principal.WindowsIdentity currentUser = System.Security.Principal.WindowsIdentity.GetCurrent();
-            return currentUser.Name;
-        }
-
-        private bool IsValidateCredentials(string userName, string password, string domain)
-        {
-            IntPtr tokenHandler = IntPtr.Zero;
-            bool isValid = LogonUser(userName, domain, password, 2, 0, ref tokenHandler);
-            return isValid;
-        }
-
-
-
         private void Authenticate(object sender, RoutedEventArgs e)
         {
-            PrincipalContext pcon = new PrincipalContext(ContextType.Domain);
-            if (pcon.ValidateCredentials(txtUsername.Text,
-                                       txtPassword.Password,
-                                       ContextOptions.Negotiate))
+            try
             {
-                NavigateFromSignIn();
+                string server = "LDAP://192.168.2.222/DC=howldev,DC=local";
+
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "howldev");
+
+                // To validate if the user credentials is in the system
+                bool validated = ctx.ValidateCredentials(txtUsername.Text, txtPassword.Password);
+
+                if (validated == true)
+                {
+                    // To get all the information related to the user
+                    UserPrincipal user = UserPrincipal.FindByIdentity(ctx, txtUsername.Text);
+
+                    // To validate if the user is not disabled
+                    if (user.Enabled == true)
+                    {
+                        NavigateFromSignIn();
+                    } else {
+                        MessageBox.Show("Sign In Failed");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Sign In Failed");
+                }
             }
+                catch(Exception se)
+            {
+                ErrorLog.getInstance().ErrorLogWrite(new List<string> { string.Format("Exception on sign in: {0} on {1}", se.Message, DateTime.UtcNow.ToLongDateString()) });
+                MessageBox.Show("Sign In Failed");
+            }
+            
+
         }
 
         private void NavigateFromSignIn()
         {
-            var newClientsWindow = new ClientsWindow(); //create new form.
-            newClientsWindow.Show(); //show the new form.
+            var newCallCentre = new CallCentre(); //create new form.
+            newCallCentre.Show(); //show the new form.
             this.Close(); //close the current form.
         }
     }

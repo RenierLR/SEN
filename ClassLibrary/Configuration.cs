@@ -8,12 +8,15 @@ namespace SmartHomeSystemsClassLibrary
 {
     public class Configuration
     {
+        #region Fields
         private Option configurationOption;
 
         private List<Product> configurationProducts;
 
         private string configurationDescription;
+        #endregion
 
+        #region Properties
         public string description
         {
             get { return configurationDescription; }
@@ -31,7 +34,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return configurationOption; }
             set { configurationOption = value; }
         }
+        #endregion
 
+        #region Constructors
         public Configuration()
         {
 
@@ -43,21 +48,35 @@ namespace SmartHomeSystemsClassLibrary
             this.products = Products;
             this.description = Description;
         }
+        #endregion
 
+        #region Overrides
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Configuration newObj = obj as Configuration;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return ((this.configurationOption == newObj.configurationOption) && (this.configurationProducts == newObj.configurationProducts) && (this.configurationDescription == newObj.configurationDescription));
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return description.GetHashCode() ^ products.GetHashCode() ^ option.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return "option: {"+option.ToString()+"}, description: "+description;
         }
+        #endregion
 
         public void createConfiguration() { }
 

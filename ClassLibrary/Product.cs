@@ -8,6 +8,7 @@ namespace SmartHomeSystemsClassLibrary
 {
     public class Product
     {
+        #region Fields
         private string productName;
 
         private string productCategory;
@@ -19,7 +20,9 @@ namespace SmartHomeSystemsClassLibrary
         private string productModel;
 
         private string productSerialNumber;
+        #endregion
 
+        #region Properties
         public string serialNumber
         {
             get { return productSerialNumber; }
@@ -55,6 +58,13 @@ namespace SmartHomeSystemsClassLibrary
             get { return productName; }
             set { productName = value; }
         }
+        #endregion
+
+        #region Constructors
+        public Product()
+        {
+
+        }
 
         public Product(string Name, string Category, string Description, string Manufacturer, string Model, string SerialNumber)
         {
@@ -65,21 +75,35 @@ namespace SmartHomeSystemsClassLibrary
             this.model = Model;
             this.serialNumber = SerialNumber;
         }
+        #endregion
 
+        #region Overrides
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Product newObj = obj as Product;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return ((this.serialNumber == newObj.serialNumber) && (this.model == newObj.model) && (this.manufacturer == newObj.manufacturer) && (this.description == newObj.description) && (this.category == newObj.category) && (this.name == newObj.name));
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return serialNumber.GetHashCode() ^ model.GetHashCode() ^ manufacturer.GetHashCode() ^ description.GetHashCode() ^ category.GetHashCode() ^ name.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return "serial number: "+serialNumber+", model: "+model+", manufacturer: "+manufacturer+", description: "+description+", name: "+name;
         }
+        #endregion
 
         public void createProduct() { }
 

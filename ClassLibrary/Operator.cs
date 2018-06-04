@@ -8,10 +8,13 @@ namespace SmartHomeSystemsClassLibrary
 {
     public class Operator : Person
     {
+        #region Fields
         private string operatorUsername;
 
         private string operatorPassword;
+        #endregion
 
+        #region Properties
         public string password
         {
             get { return operatorPassword; }
@@ -23,7 +26,9 @@ namespace SmartHomeSystemsClassLibrary
             get { return operatorUsername; }
             set { operatorUsername = value; }
         }
+        #endregion
 
+        #region Constructors
         public Operator()
         {
 
@@ -34,21 +39,35 @@ namespace SmartHomeSystemsClassLibrary
             this.username = Username;
             this.password = Password;
         }
+        #endregion
 
+        #region Overrides
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Operator newObj = obj as Operator;
+            if ((object)newObj == null)
+            {
+                return false;
+            }
+
+            return ((this.operatorUsername == newObj.operatorUsername) && (this.operatorPassword == newObj.operatorPassword));
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return base.GetHashCode() ^ password.GetHashCode() ^ username.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return base.ToString()+", password: "+password+", username: "+username;
         }
+        #endregion
 
         public void createOperator() { }
 

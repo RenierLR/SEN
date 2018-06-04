@@ -7,22 +7,19 @@ using System.Threading.Tasks;
 
 namespace DataHandler
 {
-    class FileHandlerTxt
+    public class FileHandlerTxt
     {
         private FileStream stream;
         private StreamReader reader;
         private StreamWriter writer;
         private string txtFilePath;
 
-        /// <summary>
-        /// Initialises a object of the FileHandler to write and read the data.
-        /// </summary>
-        /// <param name="txtFilePathParam">File path of the file</param>
-
         public FileHandlerTxt(string txtFilePathParam = "ErrorLog.txt")
         {
             this.txtFilePath = txtFilePathParam;
         }
+
+        #region Method to create file that does not exist
 
         void CreateFileIfNotExists(string FileName)
         {
@@ -41,6 +38,10 @@ namespace DataHandler
 
 
         }
+
+        #endregion
+
+        #region Method for writing to files
 
         public void appendDataToTextFile(List<string> DataToAppend)
         {
@@ -80,7 +81,11 @@ namespace DataHandler
                 stream.Close();
             }
         }
-        
+
+        #endregion
+
+        #region Other textfile interaction methods
+
         public List<string> getRawDataFromTextFile()
         {
             List<string> rawData = new List<string>();
@@ -153,5 +158,7 @@ namespace DataHandler
                 writer.Close();
             }
         }
+
+        #endregion
     }
 }
