@@ -55,6 +55,7 @@
     <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TechnicalPersonnel.cs" />
+    <Compile Include="ValidationCheck.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataHandler\DataHandler.csproj">

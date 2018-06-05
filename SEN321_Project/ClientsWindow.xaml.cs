@@ -1,4 +1,5 @@
-﻿using SmartHomeSystemsClassLibrary;
+﻿using ClassLibrary;
+using SmartHomeSystemsClassLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace SEN321_Project
     public partial class ClientsWindow : Window
     {
         List<Client> allClients = new List<Client>();
+        SolidColorBrush black = new SolidColorBrush(Color.FromArgb(0xFF, Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(0)));
+        SolidColorBrush red = new SolidColorBrush(Color.FromArgb(0xFF, Convert.ToByte(255), Convert.ToByte(0), Convert.ToByte(0)));
         //List<string> allClients = new List<string>();
 
         public ClientsWindow()
@@ -49,6 +52,22 @@ namespace SEN321_Project
             allClients = client.getAllClients();
 
             lstClients.ItemsSource = allClients;
+            
+            resetBorders();
+        }
+
+        private void resetBorders()
+        {
+            txtName.BorderBrush = black;
+            txtSurname.BorderBrush = black;
+            txtID.BorderBrush = black;
+            txtCell.BorderBrush = black;
+            txtEmail.BorderBrush = black;
+            txtLine1.BorderBrush = black;
+            txtPostalCode.BorderBrush = black;
+            txtTell.BorderBrush = black;
+            txtCity.BorderBrush = black;
+            txtCountry.BorderBrush = black;
         }
 
         private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -72,18 +91,70 @@ namespace SEN321_Project
 
         private void InsertNew(object sender, RoutedEventArgs e)
         {
-            Guid a = Guid.NewGuid();
-            Guid cd = Guid.NewGuid();
-            Guid c = Guid.NewGuid();
-            Guid p = Guid.NewGuid();
-            Address newAddress = new Address(txtCountry.Text, txtCity.Text, txtPostalCode.Text, txtLine1.Text, txtLine2.Text, a);
-            ContactDetails newContactDetails = new ContactDetails(txtEmail.Text, txtCell.Text, txtTell.Text, cd);
-            Client newClient = new Client(txtName.Text, txtSurname.Text, txtID.Text, newAddress, newContactDetails, p, identifierGenerator(), c);
+            bool valid = true;
+            resetBorders();
+            if (ValidationCheck.getInstance().IsValidEmail(txtEmail.Text, allClients)==false)
+            {
+                txtEmail.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsPopulatedString(txtName.Text) == false)
+            {
+                txtName.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsPopulatedString(txtSurname.Text)==false)
+            {
+                txtSurname.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsValidID(txtID.Text, allClients) == false)
+            {
+                txtID.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsValidCell(txtCell.Text) == false)
+            {
+                txtCell.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsPopulatedString(txtCountry.Text) == false)
+            {
+                txtCountry.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsPopulatedString(txtCity.Text) == false)
+            {
+                txtCity.BorderBrush = red;
+                valid = false;
+            }
+            if ((ValidationCheck.getInstance().IsStringInt(txtPostalCode.Text) == false) || (txtPostalCode.Text.Length != 4))
+            {
+                txtPostalCode.BorderBrush = red;
+                valid = false;
+            }
+            if (ValidationCheck.getInstance().IsPopulatedString(txtLine1.Text) == false)
+            {
+                txtLine1.BorderBrush = red;
+                valid = false;
+            }
             
-            insertNewClient(newClient);
+            if (valid == true)
+            {
+                Guid a = Guid.NewGuid();
+                Guid cd = Guid.NewGuid();
+                Guid c = Guid.NewGuid();
+                Guid p = Guid.NewGuid();
+                Address newAddress = new Address(txtCountry.Text, txtCity.Text, txtPostalCode.Text, txtLine1.Text, txtLine2.Text, a);
+                ContactDetails newContactDetails = new ContactDetails(txtEmail.Text, txtCell.Text, txtTell.Text, cd);
+                Client newClient = new Client(txtName.Text, txtSurname.Text, txtID.Text, newAddress, newContactDetails, p, identifierGenerator(), c);
 
-            allClients.Add(newClient);
-            lstClients.Items.Refresh();
+                insertNewClient(newClient);
+
+                allClients.Add(newClient);
+                lstClients.Items.Refresh();
+                resetBorders();
+            }
         }
 
         private void insertNewClient(Client newClient)
@@ -119,7 +190,15 @@ namespace SEN321_Project
             {
                 identifier = identifier + rnd.Next(0, 9).ToString();
             }
-            return identifier;
+
+            if (ValidationCheck.getInstance().IsValidClientIdentifier(identifier,allClients) == true)
+            {
+                return identifier;
+            }
+            else
+            {
+                return identifierGenerator();
+            }
         }
 
         private void StartCall(object sender, RoutedEventArgs e)

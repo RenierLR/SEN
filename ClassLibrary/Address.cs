@@ -32,7 +32,7 @@ namespace SmartHomeSystemsClassLibrary
         public string street2
         {
             get { return addressStreet2; }
-            set { addressStreet2 = value; }
+            set { addressStreet2 = (value == null)||(value == string.Empty) ? "N/A" : value; }
         }
 
         public string street

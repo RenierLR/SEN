@@ -28,7 +28,7 @@ namespace SmartHomeSystemsClassLibrary
         public string tellNumber
         {
             get { return contactTellNumber; }
-            set { contactTellNumber = value; }
+            set { contactTellNumber = (value == null) || (value == string.Empty) ? "N/A" : value; }
         }
 
         public string cellNumber

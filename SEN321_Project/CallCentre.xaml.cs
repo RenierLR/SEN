@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using SmartHomeSystemsClassLibrary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,12 +78,26 @@ namespace SEN321_Project
             CallLogParam.Add(string.Format("Call on {0}", DateTime.UtcNow.ToString()));
             CallLogParam.Add(string.Format("Memo: {0}", txtMemo.Text));
             CallLogParam.Add(string.Format("Duration: {0}", elapsed));
-            CallLog.getInstance().CallLogWrite(CallLogParam);
+            logCall(CallLogParam);
             btnStart.Background = green;
             btnStart.IsEnabled = true;
             btnSubmit.Background = gray;
             btnSubmit.IsEnabled = false;
             txtMemo.Text = "";
+        }
+
+        private void logCall(List<string> CallLogParam)
+        {
+            object locker = new object();
+
+            Task.Run(() => {
+
+                lock (locker)
+                {
+                    CallLog.getInstance().CallLogWrite(CallLogParam);
+                }
+
+            });
         }
     }
 }
