@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartHomeSystemsClassLibrary
 {
-    public class Client : Person
+    public class Client : Person, IComparable<Client>, IComparer<Client>
     {
 
         #region Fields
@@ -220,5 +220,27 @@ namespace SmartHomeSystemsClassLibrary
         public void deleteClient() { }
 
         public void updateClient() { }
+
+        #region iComparer and iComparable Interface implementation
+
+        public int CompareTo(Client other)
+        {
+            if (this.name != other.name)
+            {
+                return this.name.CompareTo(other.name);
+            }
+            return this.surname.CompareTo(other.surname);
+        }
+
+        public int Compare(Client x, Client y)
+        {
+            if (x.name != y.name)
+            {
+                return x.name.CompareTo(y.name);
+            }
+            return x.surname.CompareTo(y.surname);
+        }
+
+        #endregion
     }
 }
