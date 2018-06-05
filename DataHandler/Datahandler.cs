@@ -11,7 +11,7 @@ namespace DataHandler
 {
     public class DataHandler
     {
-        private static string connectionString = @"Data Source=DESKTOP-43A55O7\SQLEXPRESS;Initial Catalog=Test;Integrated Security=True";
+        private static string connectionString = @"Data Source=DESKTOP-43A55O7\SQLEXPRESS;Initial Catalog=SHSDatabase;Integrated Security=True";
         private static string providerName = "System.Data.SqlClient";
 
         private SqlConnection connection;

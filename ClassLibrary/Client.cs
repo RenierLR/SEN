@@ -46,7 +46,7 @@ namespace SmartHomeSystemsClassLibrary
 
         public Client(string Name, string Surname, string ID, Address AddressObject, ContactDetails ContactDetailsObject, Guid PersonGuidParam, string clientIdentifier, Guid ClientGuidParam) :base(Name, Surname, ID, AddressObject, ContactDetailsObject, PersonGuidParam)
         {
-            this.identifier = identifier;
+            this.identifier = clientIdentifier;
             this.clientGuid = ClientGuidParam;
         }
         #endregion
@@ -70,12 +70,12 @@ namespace SmartHomeSystemsClassLibrary
 
         public override int GetHashCode()
         {
-            return clientGuid.GetHashCode() ^ identifier.GetHashCode() ^ contract.GetHashCode();
+            return clientGuid.GetHashCode() ^ identifier.GetHashCode();
         }
 
         public override string ToString()
         {
-            return base.ToString()+", identifier: "+identifier+", contract: {"+contract.ToString()+"}";
+            return identifier;
         }
         #endregion
 
@@ -95,19 +95,19 @@ namespace SmartHomeSystemsClassLibrary
                                                  (string)clientRow["postalCode"],
                                                  (string)clientRow["street1"],
                                                  (string)clientRow["street2"],
-                                                 (Guid)clientRow["AglobalUniqueID"]);
+                                                 new Guid(clientRow["AglobalUniqueID"].ToString()));
                 ContactDetails newContactDetails = new ContactDetails((string)clientRow["email"],
                                                                       (string)clientRow["cellNumber"],
                                                                       (string)clientRow["tellNumber"],
-                                                                      (Guid)clientRow["CDglobalUniqueID"]);
+                                                                      new Guid(clientRow["CDglobalUniqueID"].ToString()));
                 Client newClient = new Client((string)clientRow["name"],
                                               (string)clientRow["surname"],
                                               (string)clientRow["identificationNumber"],
                                               newAddress,
                                               newContactDetails,
-                                              (Guid)clientRow["PglobalUniqueID"],
+                                              new Guid(clientRow["PglobalUniqueID"].ToString()),
                                               (string)clientRow["clientIdentifier"],
-                                              (Guid)clientRow["CglobalUniqueID"]);
+                                              new Guid(clientRow["CglobalUniqueID"].ToString()));
                 clients.Add(newClient);
             }
 

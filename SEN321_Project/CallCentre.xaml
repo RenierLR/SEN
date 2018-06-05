@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SEN321_Project"
         mc:Ignorable="d"
-        Title="CallCentre" Height="750" Width="1280" WindowState="Maximized">
+        Title="CallCentre" Height="750" Width="1280">
     <Canvas Name="LunacyNodes" Width="1280" Height="720" Background="#dddddd">
         <Canvas Canvas.Left="385" Canvas.Top="65" Width="530" Height="470">
             <Canvas Canvas.Left="0" Canvas.Top="0" Width="530" Height="470">

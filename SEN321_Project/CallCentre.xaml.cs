@@ -35,14 +35,14 @@ namespace SEN321_Project
             InitializeComponent();
             timer.Elapsed += Timer_Elapsed;
             timer.Interval = 1000;
+            btnStop.IsEnabled = false;
+            btnSubmit.IsEnabled = false;
         }
         
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
-
-
                 TimeSpan ts = TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds);
 
                 elapsed = string.Format("{0:0} Hours, {1:0} Minutes, {2:0} Seconds", ts.Hours, ts.Minutes, ts.Seconds);
@@ -54,7 +54,9 @@ namespace SEN321_Project
             timer.Start();
             stopwatch.Start();
             btnStart.Background = gray;
+            btnStart.IsEnabled = false;
             btnStop.Background = red;
+            btnStop.IsEnabled = true;
         }
 
         private void Stop(object sender, RoutedEventArgs e) {
@@ -64,7 +66,9 @@ namespace SEN321_Project
             stopwatch.Reset();
 
             btnStop.Background = gray;
-            btnSubmit.Background = blue; 
+            btnStop.IsEnabled = false;
+            btnSubmit.Background = blue;
+            btnSubmit.IsEnabled = true;
         }
 
         private void Submit(object sender, RoutedEventArgs e)
@@ -75,7 +79,9 @@ namespace SEN321_Project
             CallLogParam.Add(string.Format("Duration: {0}", elapsed));
             CallLog.getInstance().CallLogWrite(CallLogParam);
             btnStart.Background = green;
+            btnStart.IsEnabled = true;
             btnSubmit.Background = gray;
+            btnSubmit.IsEnabled = false;
             txtMemo.Text = "";
         }
     }
